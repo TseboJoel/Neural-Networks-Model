@@ -12,8 +12,7 @@ IMG_HEIGHT = 30
 NUM_CATEGORIES = 43
 
 # Set the model path
-CURRENT_DIR = os.path.dirname(__file__)
-MODEL_PATH = os.path.join(CURRENT_DIR,"best_model.h5")
+MODEL_PATH = os.path.join(os.path.dirname(__file__),"best_model.h5")
     
 # Load the trained model
 model = load_model(MODEL_PATH)
@@ -65,7 +64,7 @@ CATEGORIES = [
     "End of no passing by vehicles over 3.5 metric tons"
 ]
 
-def predict(image_path):
+def prediction_model(image_path):
     """
     Predict the category of the traffic sign in the given image file.
     """
@@ -87,7 +86,7 @@ def predict(image_path):
         messagebox.showerror("Error", f"Failed to predict image: {e}")
         return None
 
-def file_handler():
+def file_opener():
     """
     Open a file dialog to select an image and display the prediction.
     """
@@ -107,9 +106,9 @@ def file_handler():
         image_label.image = photo
 
         # Predict the traffic sign category
-        number, sign, probability  = predict(file_path)
+        number, sign, probability  = prediction_model(file_path)
         if sign and probability:
-            results = f"Prediction \n Sign: {sign}, Accuracy: {probability:.2f}"
+            results = f"Prediction Results \n Sign: {sign}, Confidence: {probability:.2f}"
             result_label.config(text=results)
     except Exception as e:
         messagebox.showerror("Error", f"Failed to open image: {e}")
@@ -118,23 +117,23 @@ def file_handler():
 root = tk.Tk()
 root.title("Road Sign Predictor")
 
-root.geometry("400x400")
+root.geometry("400x500")
 
 # Create and place widgets
 frame = tk.Frame(root)
 frame.pack(pady=20)
 
-text_label = tk.Label(frame, text="Upload Traffic Sign", font=("Arial", 14, "bold"))
+text_label = tk.Label(frame, text="Upload A Traffic Sign", font=("Arial", 14, "bold"))
 text_label.pack()
 
 image_label = tk.Label(frame)
 image_label.pack(pady=10)
 
-button = tk.Button(frame, text="Select Image", command=file_handler)
+button = tk.Button(frame, text="Select Image", command=file_opener)
 button.pack(pady=10)
 
 
-result_label = tk.Label(frame, text="Predicted Category: None", font=("Arial", 12))
+result_label = tk.Label(frame, text="Prediction Results: None yet", font=("Arial", 12))
 result_label.pack(pady=10)
 
 # Run the tkinter main loop
